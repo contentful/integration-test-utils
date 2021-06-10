@@ -1,0 +1,89 @@
+{
+  "name": "contentful-test-utils",
+  "description": "Utilities for Contentful integration tests",
+  "version": "0.0.1",
+  "license": "MIT",
+  "author": "Contentful <opensource@contentful.com>",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "engines": {
+    "node": ">=12"
+  },
+  "scripts": {
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "test": "tsdx test",
+    "lint": "tsdx lint",
+    "prepare": "tsdx build",
+    "size": "size-limit",
+    "analyze": "size-limit --why"
+  },
+  "bin": {
+    "clean-up-test-spaces": "./bin/clean-up-test-spaces"
+  },
+  "peerDependencies": {},
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsdx lint"
+    }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "module": "dist/contentful-test-utils.esm.js",
+  "size-limit": [
+    {
+      "path": "dist/contentful-test-utils.cjs.production.min.js",
+      "limit": "50 KB"
+    },
+    {
+      "path": "dist/contentful-test-utils.esm.js",
+      "limit": "50 KB"
+    }
+  ],
+  "release": {
+    "branches": [
+      "main",
+      "next",
+      "next-major"
+    ],
+    "plugins": [
+      [
+        "@semantic-release/commit-analyzer",
+        {
+          "releaseRules": [
+            {
+              "type": "build",
+              "scope": "deps",
+              "release": "patch"
+            }
+          ]
+        }
+      ],
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      "@semantic-release/github"
+    ]
+  },
+  "devDependencies": {
+    "@semantic-release/changelog": "^5.0.1",
+    "@size-limit/preset-small-lib": "^4.11.0",
+    "@types/node": "^15.12.2",
+    "contentful-management": "^7.22.4",
+    "husky": "^6.0.0",
+    "semantic-release": "^17.4.3",
+    "size-limit": "^4.11.0",
+    "tsdx": "^0.14.1",
+    "tslib": "^2.2.0",
+    "typescript": "^4.2.4"
+  },
+  "dependencies": {}
+}
