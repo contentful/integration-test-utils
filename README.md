@@ -38,7 +38,7 @@ Its length must be less than 30 characters.
 
 ```ts
 // returns an empty space with space '%JS CMA Entry API';
-const testSpace = await testUtilscreateTestSpace({
+const testSpace = await testUtils.createTestSpace({
   client,
   organizationId,
   repo: 'CMA',
@@ -53,7 +53,7 @@ Creates a test environment in the provided space and waits for it to be ready (t
 The length of the environment name must be less than 40 characters.
 
 ```ts
-const testEnvironment = await testUtilscreateTestEnvironment(testSpace, 'some-test-env-name')
+const testEnvironment = await testUtils.createTestEnvironment(testSpace, 'some-test-env-name')
 ```
 
 
@@ -61,7 +61,7 @@ const testEnvironment = await testUtilscreateTestEnvironment(testSpace, 'some-te
 Deletes the space with the space name provided.
 
 ```ts
-await testUtilsdeleteSpace(client, '%JS CMA Entry API')
+await testUtils.deleteSpace(client, '%JS CMA Entry API')
 ```
 
 #### Clean up Test Spaces
@@ -71,10 +71,10 @@ The function has a `dryRun` option, which lists all spaces to be deleted.
 ```ts
 // Deletes all spaces starting with '%' 
 // that have been created more than one hour (default threshold) ago
-await testUtilscleanUpTestSpaces()
+await testUtils.cleanUpTestSpaces()
 
 // With options
-await testUtilscleanUpTestSpaces({
+await testUtils.cleanUpTestSpaces({
   threshold: 60 * 1000,  // changes the threshold to one minute
   dryRun: true           // lists all spaces starting with '%' without deleting them
 })
@@ -86,7 +86,7 @@ The test cleaner can be used in different ways, according to need.
 - In your code, e.g. inside an `after()` within your test suite
 ```ts
 after(async () => {
-  await testUtilscleanUpTestSpaces()
+  await testUtils.cleanUpTestSpaces()
 })
 ```
 - As a bin script (`clean-up-test-spaces`) in a pipeline or manually
@@ -100,5 +100,5 @@ after(async () => {
 }
 ```
 
-> :warning: `cleanUpSpaces` initializes a CMA client and, for that, expects to find an environment variable called `CONTENTFUL_INTEGRATION_TEST_CMA_TOKEN` containing a functioning [Contentful Management Token](https://www.contentful.com/help/personal-access-tokens/#how-to-get-a-personal-access-token-the-web-app).
+> :warning: `cleanUpSpaces` initializes a CMA client and, for that, expects to find an environment variable called `CONTENTFUL_INTEGRATION_TEST_CMA_TOKEN` containing a functioning [Contentful Management Token](https://www.contentful.com/help/personal-access-tokens/#how-to-get-a-personal-access-token-the-web-app).<br>
 :warning: It will delete all spaces connected to that token which match the naming pattern (starting with '%').
