@@ -71,6 +71,7 @@ describe('createTestEnvironment', () => {
     const environment = await createTestEnvironment(mockSpace, defaultEnvName);
 
     expect(environment.name).toEqual(defaultEnvName);
+    expect(environment.sys.status.sys.id).toEqual('ready');
   });
 });
 

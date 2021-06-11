@@ -1,5 +1,5 @@
 import { ClientAPI } from 'contentful-management';
-import { deleteSpace } from '../../src/space/delete-space';
+import { deleteTestSpace } from '../../src/space/delete-test-space';
 
 const spaceId = 'space-id';
 
@@ -12,12 +12,12 @@ const getMockClient = (space = defaultMockSpace): ClientAPI => ({
   getSpace: jest.fn().mockResolvedValue(space),
 });
 
-describe('deleteSpace', () => {
+describe('deleteTestSpace', () => {
   it('deletes a space successfully', async () => {
     const consoleSpy = jest.spyOn(console, 'log');
 
     const mockClient = getMockClient();
-    await deleteSpace(mockClient, spaceId);
+    await deleteTestSpace(mockClient, spaceId);
 
     expect(consoleSpy).toHaveBeenCalledWith(`Deleted space ${spaceId}`);
   });
@@ -30,7 +30,7 @@ describe('deleteSpace', () => {
       delete: jest.fn().mockRejectedValue(new Error(errorMessage)),
     };
     const mockClient = getMockClient(mockSpace);
-    await deleteSpace(mockClient, spaceId);
+    await deleteTestSpace(mockClient, spaceId);
 
     expect(consoleSpy).toHaveBeenCalledWith(
       `Error deleting space ${spaceId} with error "${errorMessage}"`

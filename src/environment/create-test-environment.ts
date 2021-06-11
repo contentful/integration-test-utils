@@ -17,19 +17,22 @@ export async function createTestEnvironment(
   if (environmentName.length > ENVIRONMENT_NAME_MAX_LENGTH) {
     throw new EnvironmentNameTooLongError(environmentName);
   }
-  let environment;
+  let createdEnvironment;
   try {
-    environment = await space.createEnvironment({
+    createdEnvironment = await space.createEnvironment({
       name: environmentName,
     });
   } catch (e) {
     console.error(e);
   }
-  if (!environment) {
+  if (!createdEnvironment) {
     throw new EnvironmentCreationFailedError(environmentName);
   }
-  await waitForEnvironmentToBeReady(space, environment);
-  return environment;
+  const readyEnvironment = await waitForEnvironmentToBeReady(
+    space,
+    createdEnvironment
+  );
+  return readyEnvironment;
 }
 
 export async function waitForEnvironmentToBeReady(

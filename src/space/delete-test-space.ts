@@ -1,6 +1,6 @@
 import { ClientAPI } from 'contentful-management';
 
-export async function deleteSpace(
+export async function deleteTestSpace(
   client: ClientAPI,
   spaceId: string
 ): Promise<void> {
