@@ -4,7 +4,7 @@
 ## About
 This repository contains utility functions for integration testing of some of Contentful's open source projects. 
 
-It supports ad-hoc space creation and deletion, environment creation as well as a test space clean-up function which can be run periodically or ad.
+It supports ad-hoc space creation and deletion, environment creation as well as a test space clean-up function which can be run periodically or ad hoc.
 
 ## Pre-requisites
 
@@ -66,7 +66,7 @@ await testUtils.deleteSpace(client, '%JS CMA Entry API')
 
 #### Clean up Test Spaces
 
-Deletes spaces whose names start with the prefix `%` and which where created prior to a specific threshold time. The threshold defaults to one hour (60 * 60 * 1000 ms).
+Deletes spaces whose names start with the prefix `%` and which were created prior to a specific threshold time. The threshold defaults to one hour (60 * 60 * 1000 ms).
 The function has a `dryRun` option, which lists all spaces to be deleted.
 ```ts
 // Deletes all spaces starting with '%' 

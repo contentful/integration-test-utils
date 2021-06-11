@@ -50,7 +50,7 @@ describe('createTestSpace', () => {
     );
   });
 
-  it('creates a space with space with correct name pattern', async () => {
+  it('creates a space with correct name pattern', async () => {
     const args = getCreateSpaceArgs();
     const { language, repo, testSuiteName } = args;
     const expectedSpaceName = `${TEST_SPACE_PREFIX} ${language} ${repo} ${testSuiteName}`;
