@@ -100,5 +100,6 @@ after(async () => {
 }
 ```
 
-> :warning: `cleanUpSpaces` initializes a CMA client and, for that, expects to find an environment variable called `CONTENTFUL_INTEGRATION_TEST_CMA_TOKEN` containing a functioning [Contentful Management Token](https://www.contentful.com/help/personal-access-tokens/#how-to-get-a-personal-access-token-the-web-app).<br>
-:warning: It will delete all spaces connected to that token which match the naming pattern (starting with '%').
+> :warning: `cleanUpSpaces` initializes a CMA client and, for that, expects to find an environment variable called `CONTENTFUL_INTEGRATION_TEST_CMA_TOKEN` containing a functioning [Contentful Management Token](https://www.contentful.com/help/personal-access-tokens/#how-to-get-a-personal-access-token-the-web-app).
+
+> :warning: It will delete all spaces connected to that token which match the naming pattern (starting with '%').
