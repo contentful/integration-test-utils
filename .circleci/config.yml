@@ -1,0 +1,45 @@
+version: 2.1
+jobs:
+  lint:
+    docker:
+      - image: circleci/node:12
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - run: npm install
+      - run: npm run lint
+      - run: npm run size
+  unit:
+    docker:
+      - image: circleci/node:12
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - run: npm install
+      - run: npm run build
+      - run: npm run test -- --coverage
+  release:
+    docker:
+      - image: circleci/node:12
+    steps:
+      - checkout
+      - run: npm install
+      - run: npm run semantic-release
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - lint
+      - unit
+      - release:
+          context: dev-workflows-release
+          requires:
+            - unit
+          filters:
+            branches:
+              only:
+                - main
+                - next
+                - next-major
