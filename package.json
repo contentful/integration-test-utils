@@ -1,7 +1,7 @@
 {
-  "name": "contentful-test-utils",
+  "name": "@contentful/integration-test-utils",
   "description": "Utilities for Contentful integration tests",
-  "version": "0.0.1",
+  "version": "0.0.1-determined-by-semantic-release",
   "license": "MIT",
   "author": "Contentful <opensource@contentful.com>",
   "main": "dist/index.js",
@@ -38,17 +38,20 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "module": "dist/contentful-test-utils.esm.js",
+  "module": "dist/integration-test-utils.esm.js",
   "size-limit": [
     {
-      "path": "dist/contentful-test-utils.cjs.production.min.js",
+      "path": "dist/integration-test-utils.cjs.production.min.js",
       "limit": "50 KB"
     },
     {
-      "path": "dist/contentful-test-utils.esm.js",
+      "path": "dist/integration-test-utils.esm.js",
       "limit": "50 KB"
     }
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "release": {
     "branches": [
       "main",
