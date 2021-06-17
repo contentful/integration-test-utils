@@ -25,6 +25,9 @@ jobs:
       - image: circleci/node:12
     steps:
       - checkout
+      - run: |-
+            echo $'@contentful:registry=https://registry.npmjs.org/
+            //registry.npmjs.org/:_authToken=${NPM_TOKEN}' >> ~/.npmrc
       - run: npm install
       - run: npm run semantic-release
 workflows:

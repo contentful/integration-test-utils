@@ -1,7 +1,7 @@
 {
-  "name": "contentful-test-utils",
+  "name": "@contentful/integration-test-utils",
   "description": "Utilities for Contentful integration tests",
-  "version": "0.0.1",
+  "version": "0.0.1-determined-by-semantic-release",
   "license": "MIT",
   "author": "Contentful <opensource@contentful.com>",
   "main": "dist/index.js",
@@ -49,6 +49,9 @@
       "limit": "50 KB"
     }
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "release": {
     "branches": [
       "main",

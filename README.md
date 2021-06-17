@@ -1,5 +1,5 @@
 
-## Contentful Test Utils
+## Contentful Integration Test Utils
 
 ## About
 This repository contains utility functions for integration testing of some of Contentful's open source projects. 
@@ -15,18 +15,18 @@ Requires at least Node 12
 
 Using npm:
 ```bash
-npm install contentful-test-utils
+npm install @contentful/integration-test-utils
 ```
 
 Using yarn:
 ```bash
-yarn add contentful-test-utils
+yarn add @contentful/integration-test-utils
 ```
 
 ## Usage
 
 ```js
-const testUtils = require('contentful-test-utils')
+const testUtils = require('@contentful/integration-test-utils')
 ```
 
 ## API
