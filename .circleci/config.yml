@@ -1,10 +1,13 @@
 version: 2.1
+orbs:
+  node: circleci/node@5.0.2
 jobs:
   lint:
     docker:
-      - image: circleci/node:12
+      - image: cimg/base:stable
     steps:
       - checkout
+      - node/install
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run: npm install
@@ -12,9 +15,10 @@ jobs:
       - run: npm run size
   unit:
     docker:
-      - image: circleci/node:12
+      - image: cimg/base:stable
     steps:
       - checkout
+      - node/install
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run: npm install
@@ -22,9 +26,10 @@ jobs:
       - run: npm run test -- --coverage
   release:
     docker:
-      - image: circleci/node:12
+      - image: cimg/base:stable
     steps:
       - checkout
+      - node/install
       - run:
           name: Setup NPM
           command: |-
