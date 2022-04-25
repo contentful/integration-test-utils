@@ -11,7 +11,7 @@
     "bin"
   ],
   "engines": {
-    "node": ">=12"
+    "node": ">=14"
   },
   "repository": {
     "type": "git",
@@ -30,7 +30,6 @@
   "bin": {
     "clean-up-test-spaces": "./bin/clean-up-test-spaces"
   },
-  "peerDependencies": {},
   "husky": {
     "hooks": {
       "pre-commit": "tsdx lint"
@@ -93,6 +92,6 @@
     "typescript": "^4.2.4"
   },
   "dependencies": {
-    "contentful-management": "^7.43.0"
+    "contentful-management": "^10.0.0"
   }
 }

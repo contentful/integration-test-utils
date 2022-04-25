@@ -8,7 +8,7 @@ It supports ad-hoc space creation and deletion, environment creation as well as 
 
 ## Pre-requisites
 
-Requires at least Node 12
+Requires at least Node 14
 
 
 ## Installation
