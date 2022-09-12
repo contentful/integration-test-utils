@@ -1,4 +1,5 @@
 import { Space } from 'contentful-management/types';
+import getContentfulCollection from 'contentful-collection';
 import {
   DEFAULT_SPACE_DELETION_THRESHOLD,
   TEST_SPACE_PREFIX,
@@ -20,10 +21,11 @@ export const cleanUpTestSpaces: CleanUpSpacesFunction = async options => {
     ...options,
   };
   const client = initClient();
-  const spaces = await client.getSpaces();
+
+  const spaces = await getContentfulCollection(q => client.getSpaces(q), {});
 
   const spacesToDelete = filterDeletableSpaces({
-    spaces: spaces.items,
+    spaces: spaces,
     prefix: TEST_SPACE_PREFIX,
     threshold,
   });
