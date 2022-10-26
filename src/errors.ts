@@ -62,6 +62,8 @@ class MissingCredentialError extends Error {
   }
 }
 
+class SpaceNotProvidedError extends Error {}
+
 export {
   SpaceNameTooLongError,
   SpaceCreationFailedError,
@@ -69,4 +71,5 @@ export {
   EnvironmentCreationFailedError,
   EnvironmentNotReadyError,
   MissingCredentialError,
+  SpaceNotProvidedError,
 };

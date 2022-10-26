@@ -9,7 +9,9 @@ export async function deleteTestSpace(
     await space.delete();
     console.log(`Deleted space ${spaceId}`);
   } catch (e) {
-    console.log(e.name, e.message);
-    console.error(`Error deleting space ${spaceId} with error "${e.message}"`);
+    console.log((e as Error).name, (e as Error).message);
+    console.error(
+      `Error deleting space ${spaceId} with error "${(e as Error).message}"`
+    );
   }
 }
