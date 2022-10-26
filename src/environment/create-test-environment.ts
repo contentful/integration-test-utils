@@ -2,6 +2,7 @@ import { Environment, Space } from 'contentful-management/types';
 import {
   ENVIRONMENT_NAME_MAX_LENGTH,
   ENVIRONMENT_READY_TIMEOUT,
+  TEST_SPACE_PREFIX,
 } from './../constants';
 import {
   EnvironmentNameTooLongError,
@@ -14,19 +15,20 @@ export async function createTestEnvironment(
   space: Space,
   environmentName: string
 ): Promise<Environment> {
-  if (environmentName.length > ENVIRONMENT_NAME_MAX_LENGTH) {
-    throw new EnvironmentNameTooLongError(environmentName);
+  const testEnvironmentName = `${TEST_SPACE_PREFIX}${environmentName}`;
+  if (testEnvironmentName.length > ENVIRONMENT_NAME_MAX_LENGTH) {
+    throw new EnvironmentNameTooLongError(testEnvironmentName);
   }
   let createdEnvironment;
   try {
     createdEnvironment = await space.createEnvironment({
-      name: environmentName,
+      name: testEnvironmentName,
     });
   } catch (e) {
     console.error(e);
   }
   if (!createdEnvironment) {
-    throw new EnvironmentCreationFailedError(environmentName);
+    throw new EnvironmentCreationFailedError(testEnvironmentName);
   }
   const readyEnvironment = await waitForEnvironmentToBeReady(
     space,

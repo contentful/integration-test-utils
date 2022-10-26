@@ -50,9 +50,10 @@ const testSpace = await testUtils.createTestSpace({
 
 #### Create Test Environment
 Creates a test environment in the provided space and waits for it to be ready (timeout: 5 minutes).
-The length of the environment name must be less than 40 characters.
+The length of the environment name must be less than 40 characters and the environment will have prefixed a `%`
 
 ```ts
+// returns an environment with name '%some-test-env-name'
 const testEnvironment = await testUtils.createTestEnvironment(testSpace, 'some-test-env-name')
 ```
 
@@ -69,7 +70,6 @@ Deletes all environments that match the given regex (default: all) in a space
 ```ts
 await testUtils.cleanUpTestEnvironments({
   spaceId: 'some-test-space' // Required,
-  regex: /.*/gm // CAREFUL: If not included this is the default,
   dryRun: false
 })
 ```
@@ -103,6 +103,20 @@ Deletes all environments in a space and then deletes the space
 
 ```ts
 await testUtils.cleanUpSpace(client, 'some-test-space')
+```
+
+#### Clean up
+
+Deletes all test spaces and all the environments in that space
+
+```ts
+await testUtils.cleanUp()
+
+// With options
+await testUtils.cleanUp({
+  threshold: 60 * 1000,  // changes the threshold to one minute
+  dryRun: true           // lists all spaces starting with '%' without deleting them
+})
 ```
 
 **Usage:**

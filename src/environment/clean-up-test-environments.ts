@@ -1,10 +1,15 @@
 import { Environment } from 'contentful-management';
 import { initClient } from '../client/init-client';
+import {
+  DEFAULT_SPACE_DELETION_THRESHOLD,
+  TEST_SPACE_PREFIX,
+} from '../constants';
 import { SpaceNotProvidedError } from '../errors';
 import { deleteTestEnvironment } from './delete-test-environment';
 
 type CleanUpSpacesEnvironmentsOptions = {
   spaceId: string;
+  threshold?: number;
   regex?: RegExp;
   dryRun?: boolean;
 };
@@ -18,9 +23,9 @@ export const cleanUpTestEnvironments: CleanUpSpacesEnvironments = async options 
     throw new SpaceNotProvidedError();
   }
 
-  const { dryRun, spaceId, regex } = {
+  const { dryRun, spaceId, prefix, regex } = {
     dryRun: false,
-    regex: /.*/gm,
+    prefix: TEST_SPACE_PREFIX,
     ...options,
   };
 
@@ -30,6 +35,8 @@ export const cleanUpTestEnvironments: CleanUpSpacesEnvironments = async options 
 
   const environmentsToDelete = filterDeletableEnvironments({
     environments: environments.items,
+    threshold: DEFAULT_SPACE_DELETION_THRESHOLD,
+    prefix,
     regex,
   });
 
@@ -55,12 +62,28 @@ export const cleanUpTestEnvironments: CleanUpSpacesEnvironments = async options 
 
 type FilterEnvironmentsOptions = {
   environments: Environment[];
-  regex: RegExp;
+  regex?: RegExp;
+  prefix: string;
+  threshold: number;
 };
 
 function filterDeletableEnvironments({
   environments,
   regex,
+  prefix,
+  threshold,
 }: FilterEnvironmentsOptions) {
-  return environments.filter(({ name }) => name.match(regex));
+  return environments.filter(environment => {
+    if (regex) {
+      return (
+        environment.name.match(regex) &&
+        Date.parse(environment.sys.updatedAt) + threshold < Date.now()
+      );
+    }
+
+    return (
+      environment.name.startsWith(prefix) &&
+      Date.parse(environment.sys.updatedAt) + threshold < Date.now()
+    );
+  });
 }

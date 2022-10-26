@@ -3,12 +3,13 @@ import {
   DEFAULT_SPACE_DELETION_THRESHOLD,
   TEST_SPACE_PREFIX,
 } from '../constants';
-import { deleteTestSpace } from './delete-test-space';
 import { initClient } from '../client/init-client';
+import { cleanUpSpace } from './clean-up-test-space';
 
 type CleanUpSpacesOptions = {
   threshold?: number;
   dryRun?: boolean;
+  deleteEnvironments?: boolean;
 };
 
 type CleanUpSpacesFunction = (options?: CleanUpSpacesOptions) => Promise<void>;
@@ -42,7 +43,7 @@ export const cleanUpTestSpaces: CleanUpSpacesFunction = async options => {
       );
     } else {
       await Promise.allSettled(
-        spacesToDelete.map(space => deleteTestSpace(client, space.sys.id))
+        spacesToDelete.map(space => cleanUpSpace(client, space.sys.id))
       );
     }
   }
