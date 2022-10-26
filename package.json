@@ -45,11 +45,11 @@
   "size-limit": [
     {
       "path": "dist/integration-test-utils.cjs.production.min.js",
-      "limit": "50 KB"
+      "limit": "90 KB"
     },
     {
       "path": "dist/integration-test-utils.esm.js",
-      "limit": "50 KB"
+      "limit": "90 KB"
     }
   ],
   "publishConfig": {
