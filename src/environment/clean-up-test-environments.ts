@@ -6,7 +6,6 @@ import { deleteTestEnvironment } from './delete-test-environment';
 type CleanUpSpacesEnvironmentsOptions = {
   spaceId: string;
   regex?: RegExp;
-  threshold?: number;
   dryRun?: boolean;
 };
 

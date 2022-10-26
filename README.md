@@ -56,6 +56,23 @@ The length of the environment name must be less than 40 characters.
 const testEnvironment = await testUtils.createTestEnvironment(testSpace, 'some-test-env-name')
 ```
 
+#### Delete Test Environment
+Deletes the environment with the space and environment provided.
+
+```ts
+await testUtils.deleteTestEnvironment(client, 'some-test-space', 'some-test-env')
+```
+
+#### CleanUp Test Environments in Space
+Deletes all environments that match the given regex (default: all) in a space
+
+```ts
+await testUtils.cleanUpTestEnvironments({
+  spaceId: 'some-test-space' // Required,
+  regex: /.*/gm // CAREFUL: If not included this is the default,
+  dryRun: false
+})
+```
 
 #### Delete Test Space
 Deletes the space with the space name provided.
@@ -78,6 +95,14 @@ await testUtils.cleanUpTestSpaces({
   threshold: 60 * 1000,  // changes the threshold to one minute
   dryRun: true           // lists all spaces starting with '%' without deleting them
 })
+```
+
+#### Clean up Space
+
+Deletes all environments in a space and then deletes the space
+
+```ts
+await testUtils.cleanUpSpace(client, 'some-test-space')
 ```
 
 **Usage:**
