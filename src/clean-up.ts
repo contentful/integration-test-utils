@@ -1,13 +1,17 @@
-import { cleanUpTestSpaces } from './space/clean-up-test-spaces';
+import { cleanUpTestEnvironments } from './environment/clean-up-test-environments';
 
 type CleanUpSpacesOptions = {
+  spaces: string[],
+  regex?: RegExp,
   threshold?: number;
   dryRun?: boolean;
 };
 
 export async function cleanUp(options: CleanUpSpacesOptions) {
-  return cleanUpTestSpaces({
-    ...options,
-    deleteEnvironments: true,
-  });
+  for (const space of options.spaces) {
+    await cleanUpTestEnvironments({
+      spaceId: space,
+      ...options
+    })
+  }
 }

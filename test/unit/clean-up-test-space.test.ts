@@ -28,8 +28,6 @@ describe('cleanUpSpace', () => {
     const mockClient = getMockClient();
     await cleanUpSpace(mockClient, spaceId);
 
-    expect(defaultMockSpace.getEnvironments).toHaveBeenCalled();
-    expect(mockEnvironments.items[0].delete).toHaveBeenCalled();
     expect(consoleSpy).toHaveBeenCalledWith(`Deleted space ${spaceId}`);
   });
 

@@ -6,12 +6,6 @@ export async function cleanUpSpace(
 ): Promise<void> {
   try {
     const space = await client.getSpace(spaceId);
-    const environments = await space.getEnvironments();
-
-    for (const env of environments.items) {
-      await env.delete();
-    }
-
     await space.delete();
     console.log(`Deleted space ${spaceId}`);
   } catch (e) {
