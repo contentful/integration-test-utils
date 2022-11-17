@@ -13,10 +13,13 @@ export function initClient(): PlainClientAPI {
   if (!accessToken) {
     throw new MissingCredentialError('CONTENTFUL_INTEGRATION_TEST_CMA_TOKEN');
   }
-  return createClient({
-    accessToken,
-    ...params,
-  }, {
-    type: 'plain'
-  })
+  return createClient(
+    {
+      accessToken,
+      ...params,
+    },
+    {
+      type: 'plain',
+    }
+  );
 }

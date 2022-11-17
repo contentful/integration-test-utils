@@ -1,13 +1,20 @@
 import { PlainClientAPI } from 'contentful-management';
 import { initClient } from '../client/init-client';
 
+type DeleteTestEnvironmentProps = {
+  spaceId: string;
+  environmentId: string;
+  client?: PlainClientAPI;
+};
+
 export async function deleteTestEnvironment(
-  spaceId: string,
-  environmentId: string,
-  client?: PlainClientAPI
+  options: DeleteTestEnvironmentProps
 ): Promise<void> {
   try {
-    client = client ?? initClient();
+    const { spaceId, environmentId, client } = {
+      client: options.client ?? initClient(),
+      ...options,
+    };
 
     const environment = await client.environment.delete({
       spaceId,
@@ -18,7 +25,7 @@ export async function deleteTestEnvironment(
   } catch (e) {
     console.log((e as Error).name, (e as Error).message);
     console.error(
-      `Error deleting environment ${environmentId} with error "${
+      `Error deleting environment ${options.environmentId} with error "${
         (e as Error).message
       }"`
     );

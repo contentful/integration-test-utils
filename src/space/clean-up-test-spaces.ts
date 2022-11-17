@@ -7,7 +7,7 @@ import { PlainClientAPI, SpaceProps } from 'contentful-management';
 import { initClient } from '../client/init-client';
 
 type CleanUpSpacesOptions = {
-  client?: PlainClientAPI,
+  client?: PlainClientAPI;
   threshold?: number;
   dryRun?: boolean;
   deleteEnvironments?: boolean;
@@ -19,7 +19,7 @@ export const cleanUpTestSpaces: CleanUpSpacesFunction = async options => {
   const { threshold, dryRun, client } = {
     threshold: DEFAULT_SPACE_DELETION_THRESHOLD,
     dryRun: false,
-    client: options.client ?? initClient();
+    client: options.client ?? initClient(),
     ...options,
   };
   const spaces = await client.space.getMany({});
@@ -44,7 +44,9 @@ export const cleanUpTestSpaces: CleanUpSpacesFunction = async options => {
       );
     } else {
       await Promise.allSettled(
-        spacesToDelete.map(space => cleanUpSpace(space.sys.id, client))
+        spacesToDelete.map(space =>
+          cleanUpSpace({ spaceId: space.sys.id, client })
+        )
       );
     }
   }

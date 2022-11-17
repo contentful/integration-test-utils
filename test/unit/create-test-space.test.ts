@@ -7,13 +7,10 @@ import {
   createTestSpace,
   CreateSpaceParams,
 } from '../../src/space/create-test-space';
-
-const mockClient = {
-  createSpace: jest.fn().mockResolvedValue({ name: '% JS CMA testSuiteName' }),
-};
+import { makeMockPlainClient } from '../mocks/planClient';
 
 const defaultCreateSpaceArgs = {
-  client: mockClient,
+  client: makeMockPlainClient({}),
   organizationId: 'org-id',
   repo: 'CMA',
   language: 'JS',
@@ -21,15 +18,24 @@ const defaultCreateSpaceArgs = {
 };
 
 // @ts-ignore
-const getCreateSpaceArgs = (params = {}): CreateSpaceParams => ({
-  ...defaultCreateSpaceArgs,
-  ...params,
-});
+const getCreateSpaceArgs = (params: Partial<typeof defaultCreateSpaceArgs>) =>
+  (({
+    ...defaultCreateSpaceArgs,
+    ...params,
+  } as unknown) as CreateSpaceParams);
 
 describe('createTestSpace', () => {
   it('throws an error when the space name is too long', async () => {
+    const client = makeMockPlainClient({
+      space: {
+        create: jest
+          .fn()
+          .mockRejectedValue(new Error('Some space creation error')),
+      },
+    });
     const args = getCreateSpaceArgs({
       testSuiteName: 'I am a test suite name that is too long',
+      client,
     });
 
     await expect(createTestSpace(args)).rejects.toBeInstanceOf(
@@ -38,11 +44,13 @@ describe('createTestSpace', () => {
   });
 
   it('throws an error when the space could not be created', async () => {
-    const client = {
-      createSpace: jest
-        .fn()
-        .mockRejectedValue(new Error('Some space creation error')),
-    };
+    const client = makeMockPlainClient({
+      space: {
+        create: jest
+          .fn()
+          .mockRejectedValue(new Error('Some space creation error')),
+      },
+    });
     const args = getCreateSpaceArgs({ client });
 
     await expect(createTestSpace(args)).rejects.toBeInstanceOf(
@@ -51,7 +59,17 @@ describe('createTestSpace', () => {
   });
 
   it('creates a space with correct name pattern', async () => {
-    const args = getCreateSpaceArgs();
+    const client = makeMockPlainClient({
+      space: {
+        create: jest.fn().mockResolvedValue({
+          name: `${TEST_SPACE_PREFIX} ${defaultCreateSpaceArgs.language} ${defaultCreateSpaceArgs.repo} ${defaultCreateSpaceArgs.testSuiteName}`,
+        }),
+      },
+    });
+
+    const args = getCreateSpaceArgs({
+      client,
+    });
     const { language, repo, testSuiteName } = args;
     const expectedSpaceName = `${TEST_SPACE_PREFIX} ${language} ${repo} ${testSuiteName}`;
     const space = await createTestSpace(args);

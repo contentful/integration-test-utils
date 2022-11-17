@@ -54,7 +54,7 @@ export const cleanUpTestEnvironments: CleanUpSpacesEnvironments = async options 
   } else {
     await Promise.allSettled(
       environmentsToDelete.map(({ sys: { id } }) =>
-        deleteTestEnvironment(spaceId, id, client)
+        deleteTestEnvironment({ spaceId, environmentId: id, client })
       )
     );
   }

@@ -1,3 +1,4 @@
+import { EnvironmentProps, PlainClientAPI } from 'contentful-management';
 import {
   ENVIRONMENT_NAME_MAX_LENGTH,
   ENVIRONMENT_READY_TIMEOUT,
@@ -9,48 +10,65 @@ import {
   EnvironmentNotReadyError,
 } from '../errors';
 import { sleep } from '../utils';
-import { EnvironmentProps, PlainClientAPI } from 'contentful-management';
 import { initClient } from '../client/init-client';
 
+type CreateTestEnvironmentProps = {
+  spaceId: string;
+  environmentId: string;
+  client?: PlainClientAPI;
+};
+
 export async function createTestEnvironment(
-  spaceId: string,
-  environmentName: string,
-  client?: PlainClientAPI
+  options: CreateTestEnvironmentProps
 ): Promise<EnvironmentProps> {
-  const testEnvironmentName = `${TEST_SPACE_PREFIX}${environmentName}`;
-  if (testEnvironmentName.length > ENVIRONMENT_NAME_MAX_LENGTH) {
-    throw new EnvironmentNameTooLongError(testEnvironmentName);
+  const { environmentId, spaceId, client } = {
+    client: options.client ?? initClient(),
+    ...options,
+  };
+
+  const testEnvironmentId = `${TEST_SPACE_PREFIX}${environmentId}`;
+  if (testEnvironmentId.length > ENVIRONMENT_NAME_MAX_LENGTH) {
+    throw new EnvironmentNameTooLongError(testEnvironmentId);
   }
-  client = client ?? initClient();
 
   let createdEnvironment;
   try {
     createdEnvironment = await client.environment.create(
       { spaceId },
       {
-        name: testEnvironmentName,
+        name: testEnvironmentId,
       }
     );
   } catch (e) {
     console.error(e);
   }
   if (!createdEnvironment) {
-    throw new EnvironmentCreationFailedError(testEnvironmentName);
+    throw new EnvironmentCreationFailedError(testEnvironmentId);
   }
-  const readyEnvironment = await waitForEnvironmentToBeReady(
+  const readyEnvironment = await waitForEnvironmentToBeReady({
     client,
     spaceId,
-    environmentName
-  );
+    environmentId: testEnvironmentId,
+  });
   return readyEnvironment;
 }
 
+type WaitForEnvironmentProps = {
+  spaceId: string;
+  environmentId: string;
+  client?: PlainClientAPI;
+  timeElapsed?: number;
+};
+
 export async function waitForEnvironmentToBeReady(
-  client: PlainClientAPI,
-  spaceId: string,
-  environmentId: string,
-  timeElapsed: number = 0
+  options: WaitForEnvironmentProps
 ): Promise<EnvironmentProps> {
+  const { spaceId, environmentId, timeElapsed, client } = {
+    client: options.client ?? initClient(),
+    timeElapsed: 0,
+    ...options,
+  };
+
   if (timeElapsed > ENVIRONMENT_READY_TIMEOUT) {
     throw new EnvironmentNotReadyError(spaceId, environmentId, timeElapsed);
   }
@@ -60,12 +78,12 @@ export async function waitForEnvironmentToBeReady(
       `Environment ${environmentId} is not ready yet. Waiting 1000ms...`
     );
     return sleep(1000).then(() =>
-      waitForEnvironmentToBeReady(
+      waitForEnvironmentToBeReady({
         client,
         spaceId,
         environmentId,
-        timeElapsed + 1000
-      )
+        timeElapsed: timeElapsed + 1000,
+      })
     );
   }
   return env;
