@@ -1,13 +1,18 @@
-import { ClientAPI } from 'contentful-management';
+import { PlainClientAPI } from 'contentful-management';
+import { initClient } from '../client/init-client';
 
 export async function deleteTestEnvironment(
-  client: ClientAPI,
   spaceId: string,
-  environmentId: string
+  environmentId: string,
+  client?: PlainClientAPI
 ): Promise<void> {
   try {
-    const space = await client.getSpace(spaceId);
-    const environment = await space.getEnvironment(environmentId);
+    client = client ?? initClient();
+
+    const environment = await client.environment.delete({
+      spaceId,
+      environmentId,
+    });
     await environment.delete();
     console.log(`Deleted environment ${environmentId}`);
   } catch (e) {

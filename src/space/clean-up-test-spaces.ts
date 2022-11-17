@@ -1,27 +1,28 @@
-import { Space } from 'contentful-management/types';
 import {
   DEFAULT_SPACE_DELETION_THRESHOLD,
   TEST_SPACE_PREFIX,
 } from '../constants';
-import { initClient } from '../client/init-client';
 import { cleanUpSpace } from './clean-up-test-space';
+import { PlainClientAPI, SpaceProps } from 'contentful-management';
+import { initClient } from '../client/init-client';
 
 type CleanUpSpacesOptions = {
+  client?: PlainClientAPI,
   threshold?: number;
   dryRun?: boolean;
   deleteEnvironments?: boolean;
 };
 
-type CleanUpSpacesFunction = (options?: CleanUpSpacesOptions) => Promise<void>;
+type CleanUpSpacesFunction = (options: CleanUpSpacesOptions) => Promise<void>;
 
 export const cleanUpTestSpaces: CleanUpSpacesFunction = async options => {
-  const { threshold, dryRun } = {
+  const { threshold, dryRun, client } = {
     threshold: DEFAULT_SPACE_DELETION_THRESHOLD,
     dryRun: false,
+    client: options.client ?? initClient();
     ...options,
   };
-  const client = initClient();
-  const spaces = await client.getSpaces();
+  const spaces = await client.space.getMany({});
 
   const spacesToDelete = filterDeletableSpaces({
     spaces: spaces.items,
@@ -43,14 +44,14 @@ export const cleanUpTestSpaces: CleanUpSpacesFunction = async options => {
       );
     } else {
       await Promise.allSettled(
-        spacesToDelete.map(space => cleanUpSpace(client, space.sys.id))
+        spacesToDelete.map(space => cleanUpSpace(space.sys.id, client))
       );
     }
   }
 };
 
 type FilterDeletableSpacesParams = {
-  spaces: Space[];
+  spaces: SpaceProps[];
   prefix: string;
   threshold: number;
 };

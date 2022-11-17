@@ -1,4 +1,4 @@
-import { Environment } from 'contentful-management';
+import { EnvironmentProps, PlainClientAPI } from 'contentful-management';
 import { initClient } from '../client/init-client';
 import {
   DEFAULT_SPACE_DELETION_THRESHOLD,
@@ -9,6 +9,7 @@ import { deleteTestEnvironment } from './delete-test-environment';
 
 type CleanUpSpacesEnvironmentsOptions = {
   spaceId: string;
+  client?: PlainClientAPI;
   threshold?: number;
   regex?: RegExp;
   dryRun?: boolean;
@@ -23,15 +24,14 @@ export const cleanUpTestEnvironments: CleanUpSpacesEnvironments = async options 
     throw new SpaceNotProvidedError();
   }
 
-  const { dryRun, spaceId, prefix, regex } = {
+  const { dryRun, spaceId, prefix, regex, client } = {
     dryRun: false,
     prefix: TEST_SPACE_PREFIX,
+    client: options.client ?? initClient(),
     ...options,
   };
 
-  const client = initClient();
-  const space = await client.getSpace(spaceId);
-  const environments = await space.getEnvironments();
+  const environments = await client.environment.getMany({ spaceId });
 
   const environmentsToDelete = filterDeletableEnvironments({
     environments: environments.items,
@@ -54,14 +54,14 @@ export const cleanUpTestEnvironments: CleanUpSpacesEnvironments = async options 
   } else {
     await Promise.allSettled(
       environmentsToDelete.map(({ sys: { id } }) =>
-        deleteTestEnvironment(client, spaceId, id)
+        deleteTestEnvironment(spaceId, id, client)
       )
     );
   }
 };
 
 type FilterEnvironmentsOptions = {
-  environments: Environment[];
+  environments: EnvironmentProps[];
   regex?: RegExp;
   prefix: string;
   threshold: number;

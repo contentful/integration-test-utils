@@ -1,4 +1,5 @@
 import { ClientAPI } from 'contentful-management';
+import { plainApiClient } from '../mocks/planClient'
 import { cleanUpSpace } from '../../src/space/clean-up-test-space';
 
 const spaceId = 'space-id';
@@ -26,7 +27,7 @@ describe('cleanUpSpace', () => {
     const consoleSpy = jest.spyOn(console, 'log');
 
     const mockClient = getMockClient();
-    await cleanUpSpace(mockClient, spaceId);
+    await cleanUpSpace(plainApiClient, spaceId);
 
     expect(consoleSpy).toHaveBeenCalledWith(`Deleted space ${spaceId}`);
   });

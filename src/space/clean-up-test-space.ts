@@ -1,12 +1,13 @@
-import { ClientAPI } from 'contentful-management';
+import { PlainClientAPI } from 'contentful-management';
+import { initClient } from '../client/init-client';
 
 export async function cleanUpSpace(
-  client: ClientAPI,
-  spaceId: string
+  spaceId: string,
+  client?: PlainClientAPI
 ): Promise<void> {
   try {
-    const space = await client.getSpace(spaceId);
-    await space.delete();
+    client = client ?? initClient();
+    await client.space.delete({ spaceId });
     console.log(`Deleted space ${spaceId}`);
   } catch (e) {
     console.log((e as Error).name, (e as Error).message);

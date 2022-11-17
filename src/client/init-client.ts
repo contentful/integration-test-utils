@@ -1,4 +1,4 @@
-import { ClientAPI, createClient } from 'contentful-management';
+import { createClient, PlainClientAPI } from 'contentful-management';
 import { MissingCredentialError } from '../errors';
 
 const params: { host?: string; insecure?: boolean } = {};
@@ -8,7 +8,7 @@ if (process.env.API_INTEGRATION_TESTS) {
   params.insecure = true;
 }
 
-export function initClient(): ClientAPI {
+export function initClient(): PlainClientAPI {
   const accessToken = process.env.CONTENTFUL_INTEGRATION_TEST_CMA_TOKEN;
   if (!accessToken) {
     throw new MissingCredentialError('CONTENTFUL_INTEGRATION_TEST_CMA_TOKEN');
@@ -16,5 +16,7 @@ export function initClient(): ClientAPI {
   return createClient({
     accessToken,
     ...params,
-  });
+  }, {
+    type: 'plain'
+  })
 }
