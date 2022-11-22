@@ -13,7 +13,11 @@ type CleanUpSpacesOptions = {
   deleteEnvironments?: boolean;
 };
 
-type CleanUpSpacesFunction = (options: CleanUpSpacesOptions) => Promise<void>;
+type CleanUpSpacesFunction = (
+  options: CleanUpSpacesOptions
+) => Promise<{
+  deletedSpaceIds: string[];
+}>;
 
 export const cleanUpTestSpaces: CleanUpSpacesFunction = async options => {
   const { threshold, dryRun, client } = {
@@ -50,6 +54,9 @@ export const cleanUpTestSpaces: CleanUpSpacesFunction = async options => {
       );
     }
   }
+  return {
+    deletedSpaceIds: spacesToDelete.map(space => space.sys.id),
+  };
 };
 
 type FilterDeletableSpacesParams = {

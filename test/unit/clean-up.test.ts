@@ -5,9 +5,14 @@ describe('cleanUp', () => {
   it.only('searches for environments to clean up and deletes envs with prefix', async () => {
     const spaces = ['test'];
     const client = makeMockPlainClient({
+      space: {
+        getMany: jest.fn().mockResolvedValue({
+          items: [],
+        }),
+      },
       environment: {
         delete: jest.fn(),
-        getMany: jest.fn().mockReturnValue({
+        getMany: jest.fn().mockResolvedValue({
           items: [
             {
               name: '%as',
@@ -26,6 +31,7 @@ describe('cleanUp', () => {
       },
     });
     await cleanUp({ spaces, client });
+    expect(client.space.getMany).toBeCalledTimes(1);
     expect(client.environment.delete).toBeCalledTimes(2);
   });
 });
