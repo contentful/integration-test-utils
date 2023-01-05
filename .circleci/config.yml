@@ -1,6 +1,8 @@
 version: 2.1
 orbs:
   node: circleci/node@5.0.2
+  vault: contentful/vault@1
+
 jobs:
   lint:
     docker:
@@ -30,11 +32,9 @@ jobs:
     steps:
       - checkout
       - node/install
-      - run:
-          name: Setup NPM
-          command: |-
-            echo $'@contentful:registry=https://registry.npmjs.org/
-            //registry.npmjs.org/:_authToken=${NPM_TOKEN}' >> ~/.npmrc
+      - vault/get-secrets:
+          template-preset: 'semantic-release-ecosystem'
+      - run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
       - run:
           name: Install
           command: npm install
@@ -48,7 +48,8 @@ workflows:
       - lint
       - unit
       - release:
-          context: dev-workflows-release
+          context:
+            - vault
           requires:
             - unit
           filters:
