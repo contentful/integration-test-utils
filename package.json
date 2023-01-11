@@ -83,7 +83,7 @@
   "devDependencies": {
     "@semantic-release/changelog": "^5.0.1",
     "@size-limit/preset-small-lib": "^4.11.0",
-    "@types/node": "^15.12.2",
+    "@types/node": "^18.11.18",
     "husky": "^8.0.3",
     "semantic-release": "^17.4.3",
     "size-limit": "^4.11.0",
