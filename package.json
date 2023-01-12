@@ -85,7 +85,7 @@
     "@size-limit/preset-small-lib": "^4.11.0",
     "@types/node": "^18.11.18",
     "husky": "^8.0.3",
-    "semantic-release": "^17.4.3",
+    "semantic-release": "^20.0.2",
     "size-limit": "^4.11.0",
     "tsdx": "^0.14.1",
     "tslib": "^2.2.0",
