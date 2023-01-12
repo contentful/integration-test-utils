@@ -81,11 +81,11 @@
     ]
   },
   "devDependencies": {
-    "@semantic-release/changelog": "^5.0.1",
+    "@semantic-release/changelog": "^6.0.2",
     "@size-limit/preset-small-lib": "^8.1.1",
     "@types/node": "^18.11.18",
     "husky": "^8.0.3",
-    "semantic-release": "^17.4.3",
+    "semantic-release": "^20.0.2",
     "size-limit": "^4.11.0",
     "tsdx": "^0.14.1",
     "tslib": "^2.2.0",
