@@ -2,7 +2,7 @@ import { cleanUp } from '../../src/clean-up';
 import { makeMockPlainClient } from '../mocks/planClient';
 
 describe('cleanUp', () => {
-  it.only('searches for environments to clean up and deletes envs with prefix', async () => {
+  it('searches for environments to clean up and deletes envs with prefix', async () => {
     const spaces = ['test'];
     const client = makeMockPlainClient({
       space: {

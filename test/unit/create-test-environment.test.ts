@@ -49,7 +49,7 @@ describe('createTestEnvironment', () => {
     ).rejects.toBeInstanceOf(EnvironmentCreationFailedError);
   });
 
-  it.only('creates an environment successfully', async () => {
+  it('creates an environment successfully', async () => {
     const client = makeMockPlainClient({
       environment: {
         get: jest.fn().mockResolvedValue({
