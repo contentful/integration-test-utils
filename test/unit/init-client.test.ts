@@ -3,7 +3,7 @@ import { MissingCredentialError } from '../../src/errors';
 
 describe('initClient', () => {
   it('throws an error if necessary environment variable is missing', () => {
-    let error;
+    let error: any;
     try {
       initClient();
     } catch (e) {

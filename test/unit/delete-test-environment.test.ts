@@ -1,21 +1,19 @@
-import { deleteTestSpace } from '../../src/space/delete-test-space';
+import { deleteTestEnvironment } from '../../src/environment/delete-test-environment';
 import { makeMockPlainClient } from '../mocks/planClient';
 
 const spaceId = 'space-id';
+const environmentId = 'environment-id';
 
-describe('deleteTestSpace', () => {
+describe('deleteTestEnvironment', () => {
   it('deletes a space successfully', async () => {
-    const consoleSpy = jest.spyOn(console, 'log');
-
     const client = makeMockPlainClient({
-      space: {
+      environment: {
         delete: jest.fn(),
       },
     });
-    await deleteTestSpace({ spaceId, client });
+    await deleteTestEnvironment({ spaceId, environmentId, client });
 
-    expect(consoleSpy).toHaveBeenCalledWith(`Deleted space ${spaceId}`);
-    expect(client.space.delete).toBeCalledTimes(1);
+    expect(client.environment.delete).toBeCalledTimes(1);
   });
 
   it('informs when space deletion was unsuccessful', async () => {
@@ -23,15 +21,15 @@ describe('deleteTestSpace', () => {
 
     const errorMessage = 'some deletion error';
     const client = makeMockPlainClient({
-      space: {
+      environment: {
         delete: jest.fn().mockRejectedValue(new Error(errorMessage)),
       },
     });
 
-    await deleteTestSpace({ spaceId, client });
+    await deleteTestEnvironment({ environmentId, spaceId, client });
 
     expect(consoleSpy).toHaveBeenCalledWith(
-      `Error deleting space ${spaceId} with error "${errorMessage}"`
+      `Error deleting environment ${environmentId} with error "${errorMessage}"`
     );
   });
 });

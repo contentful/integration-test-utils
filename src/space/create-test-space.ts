@@ -1,12 +1,13 @@
 import { Space } from 'contentful-management/types';
-import { ClientAPI } from 'contentful-management';
+import { PlainClientAPI } from 'contentful-management';
 import { TEST_SPACE_PREFIX, SPACE_NAME_MAX_LENGTH } from '../constants';
 import { SpaceNameTooLongError, SpaceCreationFailedError } from '../errors';
+import { initClient } from '../client/init-client';
 
 type Repo = 'CMA' | 'CDA' | 'Export' | 'Import' | 'Migration' | 'CLI';
 
 export type CreateSpaceParams = {
-  client: ClientAPI;
+  client?: PlainClientAPI;
   organizationId: string;
   repo: Repo;
   language: 'JS';
@@ -20,6 +21,7 @@ export async function createTestSpace({
   language,
   testSuiteName,
 }: CreateSpaceParams): Promise<Space> {
+  client = client ?? initClient();
   const spaceName = `${TEST_SPACE_PREFIX}${language} ${repo} ${testSuiteName}`;
   if (spaceName.length > SPACE_NAME_MAX_LENGTH) {
     throw new SpaceNameTooLongError(spaceName);
@@ -27,11 +29,11 @@ export async function createTestSpace({
 
   let space;
   try {
-    space = await client.createSpace(
+    space = await client.space.create(
+      { organizationId },
       {
         name: spaceName,
-      },
-      organizationId
+      }
     );
   } catch (e) {
     console.error(e);

@@ -1,20 +1,15 @@
-import { deleteTestSpace } from '../../src/space/delete-test-space';
+import { cleanUpSpace } from '../../src/space/clean-up-test-space';
 import { makeMockPlainClient } from '../mocks/planClient';
 
 const spaceId = 'space-id';
 
-describe('deleteTestSpace', () => {
+describe('cleanUpSpace', () => {
   it('deletes a space successfully', async () => {
-    const consoleSpy = jest.spyOn(console, 'log');
-
     const client = makeMockPlainClient({
-      space: {
-        delete: jest.fn(),
-      },
+      space: { delete: jest.fn() },
     });
-    await deleteTestSpace({ spaceId, client });
+    await cleanUpSpace({ spaceId, client });
 
-    expect(consoleSpy).toHaveBeenCalledWith(`Deleted space ${spaceId}`);
     expect(client.space.delete).toBeCalledTimes(1);
   });
 
@@ -23,12 +18,9 @@ describe('deleteTestSpace', () => {
 
     const errorMessage = 'some deletion error';
     const client = makeMockPlainClient({
-      space: {
-        delete: jest.fn().mockRejectedValue(new Error(errorMessage)),
-      },
+      space: { delete: jest.fn().mockRejectedValue(new Error(errorMessage)) },
     });
-
-    await deleteTestSpace({ spaceId, client });
+    await cleanUpSpace({ spaceId, client });
 
     expect(consoleSpy).toHaveBeenCalledWith(
       `Error deleting space ${spaceId} with error "${errorMessage}"`

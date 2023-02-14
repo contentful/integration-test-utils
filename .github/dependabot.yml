@@ -9,7 +9,7 @@ updates:
     directory: /
     schedule:
       interval: daily
-      time: "00:00"
+      time: '00:00'
       timezone: UTC
     open-pull-requests-limit: 15
     commit-message:
@@ -17,11 +17,15 @@ updates:
       include: scope
     registries:
       - npm-registry-registry-npmjs-org
+    ignore:
+      - dependency-name: semantic-release
+        versions:
+          - '>= 20.0.0'
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: daily
-      time: "00:00"
+      time: '00:00'
       timezone: UTC
     open-pull-requests-limit: 15
     commit-message:
